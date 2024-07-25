@@ -1,6 +1,7 @@
 package com.css101.pokedex.ui.pokedex
 
 import com.css101.pokedex.domain.models.PokemonDetails
+import com.css101.pokedex.domain.models.PokemonList
 import com.css101.pokedex.domain.usecase.GetPokemonDetailsUseCase
 import com.css101.pokedex.domain.usecase.GetPokemonListUseCase
 import kotlinx.coroutines.Dispatchers
@@ -18,43 +19,57 @@ class PokedexPresenter(
     private val getPokemonDetailsUseCase: GetPokemonDetailsUseCase
 ) : MvpPresenter<PokedexView>() {
 
-    private var isDataLoaded = false
+    private var pageData: PokemonList? = null
     private var isDataLoading = false
 
-    fun showPokedex() {
-        if (!isDataLoaded && !isDataLoading) {
+    fun showPokedex(url: String? = null) {
+        if (pageData == null && !isDataLoading) {
+            viewState.showLoading()
             presenterScope.launch(Dispatchers.IO) {
                 isDataLoading = true
-
-                val listLinks = try {
-                    getPokemonListUseCase.execute()
+                pageData = try {
+                    getPokemonListUseCase.execute(url)
                 } catch (e: Exception) {
+                    viewState.showError()
                     null
                 }
-
-                val list = mutableListOf<PokemonDetails?>()
-                if (listLinks?.results != null) {
-                    val deferredResults = listLinks.results.map { result ->
-                        async {
-                            try {
-                                getPokemonDetailsUseCase.execute(result.url)
-                            } catch (e: Exception) {
-                                null
-                            }
-                        }
-                    }
-
-                    val pokemonDetailsList = deferredResults.awaitAll()
-                    list.addAll(pokemonDetailsList)
-                }
+                setButtons(pageData)
+                val list = loadImages(pageData)
 
                 withContext(Dispatchers.Main) {
                     viewState.showPokedex(list)
+                    isDataLoading = false
                 }
-
-                isDataLoading = false
-                isDataLoaded = true
             }
         }
+    }
+fun loadNewPage(url: String? = null){
+    pageData = null
+    showPokedex(url)
+}
+    private suspend fun loadImages(listLinks: PokemonList?): List<PokemonDetails?> =
+        withContext(Dispatchers.IO) {
+            val list = mutableListOf<PokemonDetails?>()
+            if (listLinks?.results != null) {
+                val deferredResults = listLinks.results.map { result ->
+                    async {
+                        try {
+                            getPokemonDetailsUseCase.execute(result.url)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            null
+                        }
+                    }
+                }
+
+                val pokemonDetailsList = deferredResults.awaitAll()
+                list.addAll(pokemonDetailsList)
+            }
+            list
+        }
+
+    private fun setButtons(listLinks: PokemonList?) {
+        viewState.setBackBtn(listLinks?.previous)
+        viewState.setForwardBtn(listLinks?.next)
     }
 }

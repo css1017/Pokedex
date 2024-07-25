@@ -8,8 +8,9 @@ import com.css101.pokedex.domain.models.PokemonList
 import com.css101.pokedex.domain.repository.PokemonRepo
 
 class PokemonRepoImpl(private val api: PokedexApi) : PokemonRepo {
-    override suspend fun getPokemonList(): PokemonList? {
-        return storageToDomain(api.getPokemonList().body())
+    override suspend fun getPokemonList(url: String?): PokemonList? {
+        val list = url?.let { api.getPokemonList(url).body() } ?: api.getPokemonList().body()
+        return storageToDomain(list)
     }
 
     override suspend fun getPokemon(url: String): PokemonDetails? {
