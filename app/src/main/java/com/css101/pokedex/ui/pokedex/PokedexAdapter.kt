@@ -1,5 +1,6 @@
 package com.css101.pokedex.ui.pokedex
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,6 @@ class PokedexAdapter(
             holder.itemView.setOnClickListener {
                 onItemClick(pokemon)
             }
-        }
+        } else { Log.e("aaa", "$items")}
     }
 }

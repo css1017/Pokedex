@@ -16,7 +16,7 @@ data class PokemonDetails(
     @JsonProperty("height")
     val height: Int,
     @JsonProperty("held_items")
-    val heldItems: List<HeldItem>,
+    val heldItems: List<HeldItem?>,
     @JsonProperty("id")
     val id: Int,
     @JsonProperty("is_default")
@@ -30,17 +30,17 @@ data class PokemonDetails(
     @JsonProperty("order")
     val order: Int,
     @JsonProperty("past_abilities")
-    val pastAbilities: List<PastAbility>,
+    val pastAbilities: List<PastAbility?>,
     @JsonProperty("past_types")
-    val pastTypes: List<PastType>,
+    val pastTypes: List<PastType?>,
     @JsonProperty("species")
     val species: Species,
     @JsonProperty("sprites")
     val sprites: Sprites,
     @JsonProperty("stats")
-    val stats: List<Stat>,
+    val stats: List<Stat?>,
     @JsonProperty("types")
-    val types: List<Type>,
+    val types: List<Type?>,
     @JsonProperty("weight")
     val weight: Int
 )
@@ -93,7 +93,7 @@ data class HeldItem(
     @JsonProperty("item")
     val item: Item,
     @JsonProperty("version_details")
-    val versionDetails: List<VersionDetail>
+    val versionDetails: List<VersionDetail?>
 )
 
 data class Item(
@@ -582,13 +582,13 @@ data class TypeDetails(
 
 data class PastAbility(
     @JsonProperty("ability")
-    val ability: AbilityDetails,
+    val ability: AbilityDetails?,
     @JsonProperty("is_hidden")
-    val isHidden: Boolean,
+    val isHidden: Boolean?,
     @JsonProperty("slot")
-    val slot: Int,
+    val slot: Int?,
     @JsonProperty("generation")
-    val generation: Generation
+    val generation: Generation?
 )
 
 data class Generation(
@@ -600,9 +600,9 @@ data class Generation(
 
 data class PastType(
     @JsonProperty("slot")
-    val slot: Int,
+    val slot: Int?,
     @JsonProperty("type")
-    val type: TypeDetails,
+    val type: TypeDetails?,
     @JsonProperty("generation")
-    val generation: Generation
+    val generation: Generation?
 )

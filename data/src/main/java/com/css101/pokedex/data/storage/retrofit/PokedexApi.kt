@@ -11,5 +11,8 @@ interface PokedexApi {
     suspend fun getPokemonList(): Response<PokemonListStorage>
 
     @GET
+    suspend fun getPokemonList(@Url url: String): Response<PokemonListStorage>
+
+    @GET
     suspend fun getPokemonDetails(@Url url: String): Response<PokemonDetails>
 }
