@@ -1,6 +1,7 @@
 package com.css101.pokedex.app
 
 import android.app.Application
+import com.css101.pokedex.data.di.networkModule
 import com.css101.pokedex.di.appModule
 import com.css101.pokedex.di.dataModule
 import com.css101.pokedex.di.domainModule
@@ -12,7 +13,7 @@ class App : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(appModule, domainModule, dataModule)
+            modules(appModule, domainModule, dataModule, networkModule)
         }
     }
 }

@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -18,7 +19,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    packaging {
+        resources.excludes.add("META-INF/NOTICE.md")
+        resources.excludes.add("META-INF/LICENSE.md")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -41,20 +45,20 @@ android {
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":domain"))
 
-    implementation ("com.github.moxy-community:moxy-ktx:2.2.2")
-    implementation ("com.github.moxy-community:moxy-androidx:2.2.2")
-    kapt ("com.github.moxy-community:moxy-compiler:2.2.2")
-
-    implementation("io.insert-koin:koin-core:3.5.6")
-    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation (libs.moxy.ktx)
+    implementation (libs.moxy.androidx)
+    kapt (libs.moxy.compiler)
+    implementation (libs.glide)
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)

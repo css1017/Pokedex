@@ -6,7 +6,7 @@ import com.css101.pokedex.ui.random.RandomPokemonPresenter
 import org.koin.dsl.module
 
 val appModule = module {
-    single { PokedexPresenter() }
+    single { PokedexPresenter(get(),get()) }
     single { RandomPokemonPresenter() }
     single { FavouritePokemonPresenter() }
 }
